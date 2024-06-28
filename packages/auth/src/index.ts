@@ -12,7 +12,11 @@ import { inviteSubject } from './subjects/invite'
 import { organizationSubject } from './subjects/organization'
 import { projectSubject } from './subjects/project'
 import { userSubject } from './subjects/user'
-import { Project } from './models/project'
+
+export * from './models/user'
+export * from './models/organization'
+export * from './models/project'
+export * from './roles'
 
 const AppAbilitiesSchema = z.union([
   projectSubject,
@@ -42,5 +46,9 @@ export function defineAbilitiesFor(user: User) {
       return subject.__typename
     },
   })
+
+  ability.can = ability.can.bind(ability)
+  ability.cannot = ability.cannot.bind(ability)
+
   return ability
 }

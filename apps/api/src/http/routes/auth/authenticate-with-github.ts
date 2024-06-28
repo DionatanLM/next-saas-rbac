@@ -5,6 +5,8 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { BadRequestError } from '../_errors/bad-request-error'
 
+//https://github.com/login/oauth/authorize?client_id=Ov23li3haH7AiaYUbmFN&redirect_uri=http://localhost:3000/api/auth/callback&scope=user:email
+
 export async function authenticateWithGithub(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
     '/sessions/github',
