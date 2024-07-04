@@ -17,7 +17,7 @@ export async function signInWithEmailAndPassword(_: unknown, data: FormData) {
   if (!result.success) {
     const errors = result.error.flatten().fieldErrors
 
-    return { sucess: false, message: null, errors }
+    return { success: false, message: null, errors }
   }
   const { email, password } = result.data
 
