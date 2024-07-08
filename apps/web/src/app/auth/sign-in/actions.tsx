@@ -2,6 +2,7 @@
 
 import { signInWithPassword } from '@/http/sign-in-with-password'
 import { HTTPError } from 'ky'
+import { cookies } from 'next/headers'
 import { z } from 'zod'
 
 const signInSchema = z.object({
@@ -11,7 +12,7 @@ const signInSchema = z.object({
   password: z.string().min(1, { message: 'Please, provide a password.' }),
 })
 
-export async function signInWithEmailAndPassword(_: unknown, data: FormData) {
+export async function signInWithEmailAndPassword(data: FormData) {
   const result = signInSchema.safeParse(Object.fromEntries(data))
 
   if (!result.success) {
@@ -29,7 +30,10 @@ export async function signInWithEmailAndPassword(_: unknown, data: FormData) {
       password: String(password),
     })
 
-    console.log(token)
+    cookies().set('token', token, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 7,
+    })
   } catch (error) {
     if (error instanceof HTTPError) {
       const { message } = await error.response.json()
@@ -43,7 +47,8 @@ export async function signInWithEmailAndPassword(_: unknown, data: FormData) {
       message: 'Unexpected error, try again in a few minutes.',
       errors: null,
     }
-  }
+  } 
+  
 
   return { success: true, message: null, errors: null }
 }
